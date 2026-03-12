@@ -1,10 +1,10 @@
 use serde_json::{Value, json};
-use plugin_sdk::{Plugin, export_plugin};
+use plugin_sdk::{NynoPlugin, export_plugin};
 
 #[derive(Default)]
-pub struct SimpleRustPlugin;
+pub struct NynoIf;
 
-impl Plugin for SimpleRustPlugin {
+impl NynoPlugin for NynoIf {
     fn run(&self, args: Vec<Value>, context: &mut Value) -> i32 {
         let set_name = context.get("set_context").and_then(|v| v.as_str()).unwrap_or("prev").to_string();
         let result = if args.len() >= 3 {
@@ -28,5 +28,5 @@ impl Plugin for SimpleRustPlugin {
     }
 }
 
-export_plugin!(SimpleRustPlugin);
+export_plugin!(NynoIf);
 

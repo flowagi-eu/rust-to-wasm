@@ -1,11 +1,11 @@
 // cat example-plugin2/src/lib.rs
 use serde_json::{Value, json};
-use plugin_sdk::{Plugin, export_plugin};
+use plugin_sdk::{NynoPlugin, export_plugin};
 
 #[derive(Default)]
-pub struct SortKVPlugin;
+pub struct NynoSortKv;
 
-impl Plugin for SortKVPlugin {
+impl NynoPlugin for NynoSortKv {
     fn run(&self, args: Vec<Value>, context: &mut Value) -> i32 {
         // Determine key to store result in context
         let set_name = context
@@ -60,4 +60,4 @@ impl Plugin for SortKVPlugin {
     }
 }
 
-export_plugin!(SortKVPlugin);
+export_plugin!(NynoSortKv);

@@ -1,13 +1,13 @@
-## Example Code (Nyno Plugin):
+## Example Code (for nyno-if node):
 
 ```
 use serde_json::{Value, json};
-use plugin_sdk::{Plugin, export_plugin};
+use plugin_sdk::{NynoPlugin, export_plugin};
 
 #[derive(Default)]
-pub struct SimpleRustPlugin;
+pub struct NynoIf;
 
-impl Plugin for SimpleRustPlugin {
+impl NynoPlugin for NynoIf {
     fn run(&self, args: Vec<Value>, context: &mut Value) -> i32 {
         let set_name = context.get("set_context").and_then(|v| v.as_str()).unwrap_or("prev").to_string();
         let result = if args.len() >= 3 {
@@ -31,11 +31,11 @@ impl Plugin for SimpleRustPlugin {
     }
 }
 
-export_plugin!(SimpleRustPlugin);
+export_plugin!(NynoIf);
 ```
 
-# Rust to WASM
-Simple Rust to WASM SDK (v0.4) that works well with NodeJS/Bun.
+# Rust to WASM for Nyno Workflows
+Simple Rust to Nyno Plugin SDK (v0.5) for producing WASM that works well with NodeJS/Bun.
 
 Goal: One simple safe fast interface for creating WASM (created by Rust) in NodeJS/Bun backends/engines. In our case for Nyno Workflows.
 
@@ -49,20 +49,23 @@ bash build_and_run.sh
 Should output something like:
 ```
     Finished `release` profile [optimized] target(s) in 0.02s
-[DEBUG] Input JSON: {"args":[10,"lower than",5],"context":{"set_context":"prev"}}
-[DEBUG] Output offset: 93 length: 76
-[DEBUG] Output JSON string: {"args":[10,"lower than",5],"context":{"set_context":"prev"},"result":false}
-Rust plugin eval 1: {
-  args: [ 10, 'lower than', 5 ],
-  context: { set_context: 'prev' },
-  result: false
-}
-[DEBUG] Input JSON: {"args":[7,"higher than",3],"context":{"set_context":"prev"}}
-[DEBUG] Output offset: 93 length: 75
-[DEBUG] Output JSON string: {"args":[7,"higher than",3],"context":{"set_context":"prev"},"result":true}
-Rust plugin eval 2: {
-  args: [ 7, 'higher than', 3 ],
-  context: { set_context: 'prev' },
-  result: true
+    Finished `release` profile [optimized] target(s) in 0.02s
+Build complete: build/rust_plugin.wasm
+    Finished `release` profile [optimized] target(s) in 0.02s
+Build complete: build/rust_plugin2.wasm
+Debug: input JSON bytes length = 61 outPtr = 61
+Debug: output offset = 77 length = 58
+Debug: raw output string = {"context":{"prev":false,"set_context":"prev"},"result":0}
+NynoIf Plugin eval 1: { context: { prev: false, set_context: 'prev' }, result: 0 }
+Debug: input JSON bytes length = 61 outPtr = 61
+Debug: output offset = 77 length = 57
+Debug: raw output string = {"context":{"prev":true,"set_context":"prev"},"result":1}
+NynoIf Plugin eval 2: { context: { prev: true, set_context: 'prev' }, result: 1 }
+Debug: input JSON bytes length = 72 outPtr = 72
+Debug: output offset = 88 length = 88
+Debug: raw output string = {"context":{"set_context":"sorted","sorted":[["c",9.0],["a",5.0],["b",2.0]]},"result":0}
+NynoSortKv Plugin eval 3: {
+  context: { set_context: 'sorted', sorted: [ [Array], [Array], [Array] ] },
+  result: 0
 }
 ```

@@ -6,7 +6,7 @@ use serde_json::{Value, json};
 
 /// Trait that all plugins must implement.
 /// Returns an integer result code. All outputs go via mutable context.
-pub trait Plugin {
+pub trait NynoPlugin {
     fn run(&self, args: Vec<Value>, context: &mut Value) -> i32;
 }
 

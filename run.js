@@ -52,11 +52,11 @@ async function runWasm(instance, inputJson) {
 
   const input1 = { args: [10, "lower than", 5], context: { set_context: "prev" } };
   const out1 = await runWasm(instance, input1);
-  console.log("Plugin eval 1:", out1);
+  console.log("NynoIf Plugin eval 1:", out1);
 
   const input2 = { args: [7, "higher than", 3], context: { set_context: "prev" } };
   const out2 = await runWasm(instance, input2);
-  console.log("Plugin eval 2:", out2);
+  console.log("NynoIf Plugin eval 2:", out2);
 
 
 {
@@ -69,7 +69,7 @@ async function runWasm(instance, inputJson) {
     context: { set_context: "sorted" }
   };
   const out2 = await runWasm(instance2, kvInput);
-  console.log("Plugin eval 3:", out2);
+  console.log("NynoSortKv Plugin eval 3:", out2);
 
 }
 
