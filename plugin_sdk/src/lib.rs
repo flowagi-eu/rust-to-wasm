@@ -25,8 +25,16 @@ macro_rules! export_plugin {
                 Err(_) => return $crate::write_output(out_ptr as usize, json!({"error":"invalid JSON"})),
             };
 
-            let args = input.get("args").and_then(|v| v.as_array().cloned()).unwrap_or_default();
-            let mut context = input.get("context").cloned().unwrap_or(json!({}));
+let args = input
+    .get(0)
+    .and_then(|v| v.as_array())
+    .cloned()
+    .unwrap_or_default();
+
+let mut context = input
+    .get(1)
+    .cloned()
+    .unwrap_or(json!({}));
 
             // Instantiate plugin
             let plugin = <$plugin>::default();

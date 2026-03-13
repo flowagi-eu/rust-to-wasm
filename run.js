@@ -6,11 +6,11 @@ async function loadWasm(path) {
   return instance;
 }
 
-async function runWasm(instance, inputJson) {
+async function runWasm(instance, args,context) {
   const memory = instance.exports.memory;
   const memBuffer = new Uint8Array(memory.buffer);
   const encoder = new TextEncoder();
-  const inputBytes = encoder.encode(JSON.stringify(inputJson));
+  const inputBytes = encoder.encode(JSON.stringify([args,context]));
 
   // Start writing input at 0
   const inPtr = 0;
@@ -50,25 +50,27 @@ async function runWasm(instance, inputJson) {
   const instance = await loadWasm("build/rust_plugin.wasm");
   const instance2 = await loadWasm("build/rust_plugin2.wasm");      // SortKVPlugin
 
-  const input1 = { args: [10, "lower than", 5], context: { set_context: "prev" } };
-  const out1 = await runWasm(instance, input1);
+  {
+  const args = [10, "lower than", 5];
+  const context = { set_context: "prev" };
+  const out1 = await runWasm(instance, args,context);
   console.log("NynoIf Plugin eval 1:", out1);
-
-  const input2 = { args: [7, "higher than", 3], context: { set_context: "prev" } };
-  const out2 = await runWasm(instance, input2);
-  console.log("NynoIf Plugin eval 2:", out2);
-
+  }
+  {
+  const args = [7, "higher than", 3];
+  const context = { set_context: "prev" };
+  const out1 = await runWasm(instance, args,context);
+  console.log("NynoIf Plugin eval 2:", out1);
+  }
 
 {
 // --- Run SortKVPlugin ---
-  const kvInput = {
-    args: [
+  const args = [
       { a: 5, b: 2, c: 9 },   // object to sort
       "desc"                  // order
-    ],
-    context: { set_context: "sorted" }
-  };
-  const out2 = await runWasm(instance2, kvInput);
+    ];
+  const context = { set_context: "sorted" }
+  const out2 = await runWasm(instance2, args,context);
   console.log("NynoSortKv Plugin eval 3:", out2);
 
 }
